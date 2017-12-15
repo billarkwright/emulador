@@ -1,12 +1,21 @@
-//-----------------------------------------
-// GRF Files
-// Add as many as needed.
-//-----------------------------------------
-//grf: C:\Program Files\Gravity\RO\rdata.grf
+// _________                                    
+// \_   ___ \_______  ____   ____  __ __  ______
+// /    \  \/\_  __ \/    \ /    \|  |  \/  ___/
+// \     \____|  | \(  ( ) )   |  \  |  /\___ \ 
+//  \______  /|__|   \____/|___|  /____//____  >
+//         \/                   \/           \/ 
+//-----------------------------------------------
+// Configuração de leitura de mapas por grf/data
+//-----------------------------------------------
+
+// Adicione arquivos GRF ou pastas Data, nas quais deseja realizar a leitura no lugar da leitura do mapcache.
+// Isso fará com que a inicialização do servidor seja mais demorada, e não é recomendado que seja feito em produção.
+// O uso mais comum para este arquivo de configuração é para a geração do mapcache em si.
+
+// Arquivos GRF
+//grf: C:\Program Files (x86)\Gravity\Ragnarok Online\data.grf
 //grf: C:\Program Files\Gravity\RO\data.grf
 
-//-----------------------------------------
-// Data Directory
-// Use the base folder, not the data\ path.
-//-----------------------------------------
+// Pastas Data
+// Adicione o caminho para a pasta data, sem incluí-la.
 //data_dir: C:\Program Files\Gravity\RO\

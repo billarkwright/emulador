@@ -38,7 +38,7 @@
 #endif
 
 #define DISPLAY_MESSAGE_WIP
-#define ENABLE_ITEM_PACKAGES
+//#define ENABLE_ITEM_PACKAGES
 
 /**
  * End of File

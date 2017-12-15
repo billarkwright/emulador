@@ -1037,7 +1037,7 @@ static int instance_db_free(DBKey key, DBData *data, va_list ap) {
  * Read instance_db.txt files
  **/
 void instance_readdb(void) {
-	const char* filename[] = { DBPATH"instance_db.txt", "import/instance_db.txt"};
+	const char* filename[] = { "instance_db.txt", "import/instance_db.txt"};
 	int f;
 
 	for (f = 0; f<ARRAYLENGTH(filename); f++) {

@@ -1541,7 +1541,7 @@ int pet_skill_support_timer(int tid, unsigned int tick, int id, intptr_t data)
 void read_petdb()
 {
 	const char* filename[] = {
-		DBPATH"pet_db.txt",
+		"pet_db.txt",
 		DBIMPORT"/pet_db.txt"
 	};
 	unsigned short nameid;

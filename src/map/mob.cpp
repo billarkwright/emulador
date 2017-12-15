@@ -5217,12 +5217,12 @@ static void mob_load(void)
 		mob_read_sqlskilldb();
 	}else{
 		for(int i = 0; i < ARRAYLENGTH(dbsubpath); i++){
-			int n2 = strlen(db_path)+strlen(DBPATH)+strlen(dbsubpath[i])+1;
+			int n2 = strlen(db_path)+strlen(dbsubpath[i])+1;
 			char* dbsubpath2 = (char*)aMalloc(n2+1);
 			bool silent = i > 0;
 
 			if( i == 0 ) {
-				safesnprintf(dbsubpath2,n2,"%s/%s%s",db_path,DBPATH,dbsubpath[i]);
+				safesnprintf(dbsubpath2,n2,"%s/%s",db_path,dbsubpath[i]);
 			} else {
 				safesnprintf(dbsubpath2,n2,"%s%s",db_path,dbsubpath[i]);
 			}
@@ -5235,7 +5235,7 @@ static void mob_load(void)
 
 	for(int i = 0; i < ARRAYLENGTH(dbsubpath); i++){	
 		int n1 = strlen(db_path)+strlen(dbsubpath[i])+1;
-		int n2 = strlen(db_path)+strlen(DBPATH)+strlen(dbsubpath[i])+1;
+		int n2 = strlen(db_path)+strlen(dbsubpath[i])+1;
 
 		char* dbsubpath1 = (char*)aMalloc(n1+1);
 		char* dbsubpath2 = (char*)aMalloc(n2+1);
@@ -5243,7 +5243,7 @@ static void mob_load(void)
 		
 		if(i==0) {
 			safesnprintf(dbsubpath1,n1,"%s%s",db_path,dbsubpath[i]);
-			safesnprintf(dbsubpath2,n2,"%s/%s%s",db_path,DBPATH,dbsubpath[i]);
+			safesnprintf(dbsubpath2,n2,"%s/%s",db_path,dbsubpath[i]);
 		} else {
 			safesnprintf(dbsubpath1,n1,"%s%s",db_path,dbsubpath[i]);
 			safesnprintf(dbsubpath2,n1,"%s%s",db_path,dbsubpath[i]);

@@ -81,13 +81,13 @@ static void cashshop_read_db_txt( void ){
 
 	for( fi = 0; fi < ARRAYLENGTH( dbsubpath ); ++fi ){
 		uint8 n1 = (uint8)(strlen(db_path)+strlen(dbsubpath[fi])+1);
-		uint8 n2 = (uint8)(strlen(db_path)+strlen(DBPATH)+strlen(dbsubpath[fi])+1);
+		uint8 n2 = (uint8)(strlen(db_path)+strlen(dbsubpath[fi])+1);
 		char* dbsubpath1 = (char*)aMalloc(n1+1);
 		char* dbsubpath2 = (char*)aMalloc(n2+1);
 
 		if(fi==0) {
 			safesnprintf(dbsubpath1,n1,"%s%s",db_path,dbsubpath[fi]);
-			safesnprintf(dbsubpath2,n2,"%s/%s%s",db_path,DBPATH,dbsubpath[fi]);
+			safesnprintf(dbsubpath2,n2,"%s/%s",db_path,dbsubpath[fi]);
 		}
 		else {
 			safesnprintf(dbsubpath1,n1,"%s%s",db_path,dbsubpath[fi]);

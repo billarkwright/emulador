@@ -1173,7 +1173,7 @@ bool achievement_read_db_sub(const YAML::Node &node, int n, const std::string &s
  */
 void achievement_read_db(void)
 {
-	std::vector<std::string> directories = { std::string(db_path) + "/" + std::string(DBPATH),  std::string(db_path) + "/" + std::string(DBIMPORT) + "/" };
+	std::vector<std::string> directories = { std::string(db_path) + "/",  std::string(db_path) + "/" + std::string(DBIMPORT) + "/" };
 	static const std::string file_name("achievement_db.yml");
 
 	for (auto &directory : directories) {
