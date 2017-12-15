@@ -11115,7 +11115,7 @@ void pc_readdb(void) {
 
 		s = pc_read_statsdb(dbsubpath2,s,i > 0);
 		if (i == 0)
-			sv_readdb(dbsubpath1, "pre-re/job_db1.txt",',',5+MAX_WEAPON_TYPE,5+MAX_WEAPON_TYPE,CLASS_COUNT,&pc_readdb_job1, i > 0);
+			sv_readdb(dbsubpath1, "job_db1.txt",',',5+MAX_WEAPON_TYPE,5+MAX_WEAPON_TYPE,CLASS_COUNT,&pc_readdb_job1, i > 0);
 		else
 			sv_readdb(dbsubpath1, "job_db1.txt",',',5+MAX_WEAPON_TYPE,6+MAX_WEAPON_TYPE,CLASS_COUNT,&pc_readdb_job1, i > 0);
 		sv_readdb(dbsubpath1, "job_db2.txt",',',1,1+MAX_LEVEL,CLASS_COUNT,&pc_readdb_job2, i > 0);

@@ -16151,7 +16151,7 @@ int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv) {
 }
 
 /**
- * Get the skill cast time for Pre-Re cast
+ * Get the skill cast time
  * @param bl: The caster
  * @param time: Cast time before Status Change addition or reduction
  * @return time: Modified castime after status change addition or reduction
