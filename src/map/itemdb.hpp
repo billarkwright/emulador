@@ -811,9 +811,6 @@ struct item_data
 	int wlv;
 	int view_id;
 	int elvmax; ///< Maximum level for this item
-#ifdef RENEWAL
-	int matk;
-#endif
 
 	int delay;
 //Lupus: I rearranged order of these fields due to compatibility with ITEMINFO script command

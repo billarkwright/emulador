@@ -835,11 +835,7 @@ struct s_job_info {
 	int hp_factor, hp_multiplicator, sp_factor;
 	int max_weight_base;
 	char job_bonus[MAX_LEVEL];
-#ifdef RENEWAL_ASPD
-	int aspd_base[MAX_WEAPON_TYPE+1];
-#else
 	int aspd_base[MAX_WEAPON_TYPE];	//[blackhole89]
-#endif
 	uint32 exp_table[2][MAX_LEVEL];
 	uint32 max_level[2];
 	struct s_params {
@@ -953,22 +949,12 @@ short pc_maxaspd(struct map_session_data *sd);
 #define pcdb_checkid(class_) pcdb_checkid_sub((unsigned int)class_)
 
 // clientside display macros (values to the left/right of the "+")
-#ifdef RENEWAL
-	#define pc_leftside_atk(sd) ((sd)->battle_status.batk)
-	#define pc_rightside_atk(sd) ((sd)->battle_status.watk + (sd)->battle_status.watk2 + (sd)->battle_status.eatk)
-	#define pc_leftside_def(sd) ((sd)->battle_status.def2)
-	#define pc_rightside_def(sd) ((sd)->battle_status.def)
-	#define pc_leftside_mdef(sd) ((sd)->battle_status.mdef2)
-	#define pc_rightside_mdef(sd) ((sd)->battle_status.mdef)
-	#define pc_leftside_matk(sd) (status_base_matk(&(sd)->bl, status_get_status_data(&(sd)->bl), (sd)->status.base_level))
-	#define pc_rightside_matk(sd) ((sd)->battle_status.rhw.matk+(sd)->battle_status.lhw.matk+(sd)->bonus.ematk)
-#else
-	#define pc_leftside_atk(sd) ((sd)->battle_status.batk + (sd)->battle_status.rhw.atk + (sd)->battle_status.lhw.atk)
-	#define pc_rightside_atk(sd) ((sd)->battle_status.rhw.atk2 + (sd)->battle_status.lhw.atk2)
-	#define pc_leftside_def(sd) ((sd)->battle_status.def)
-	#define pc_rightside_def(sd) ((sd)->battle_status.def2)
-	#define pc_leftside_mdef(sd) ((sd)->battle_status.mdef)
-	#define pc_rightside_mdef(sd) ( (sd)->battle_status.mdef2 - ((sd)->battle_status.vit>>1) )
+#define pc_leftside_atk(sd) ((sd)->battle_status.batk + (sd)->battle_status.rhw.atk + (sd)->battle_status.lhw.atk)
+#define pc_rightside_atk(sd) ((sd)->battle_status.rhw.atk2 + (sd)->battle_status.lhw.atk2)
+#define pc_leftside_def(sd) ((sd)->battle_status.def)
+#define pc_rightside_def(sd) ((sd)->battle_status.def2)
+#define pc_leftside_mdef(sd) ((sd)->battle_status.mdef)
+#define pc_rightside_mdef(sd) ( (sd)->battle_status.mdef2 - ((sd)->battle_status.vit>>1) )
 #define pc_leftside_matk(sd) \
     (\
     ((sd)->sc.data[SC_MAGICPOWER] && (sd)->sc.data[SC_MAGICPOWER]->val4) \
@@ -981,7 +967,6 @@ short pc_maxaspd(struct map_session_data *sd);
 		?((sd)->battle_status.matk_max * 100 + 50) / ((sd)->sc.data[SC_MAGICPOWER]->val3+100) \
         :(sd)->battle_status.matk_max \
     )
-#endif
 
 void pc_set_reg_load(bool val);
 int pc_split_atoi(char* str, int* val, char sep, int max);
@@ -1326,9 +1311,5 @@ void pc_show_questinfo(struct map_session_data *sd);
 void pc_show_questinfo_reinit(struct map_session_data *sd);
 
 bool pc_job_can_entermap(enum e_job jobid, int m, int group_lv);
-
-#if defined(RENEWAL_DROP) || defined(RENEWAL_EXP)
-int pc_level_penalty_mod(int level_diff, uint32 mob_class, enum e_mode mode, int type);
-#endif
 
 #endif /* _PC_HPP_ */

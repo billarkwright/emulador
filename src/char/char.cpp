@@ -51,6 +51,10 @@ struct fame_list smith_fame_list[MAX_FAME_LIST];
 struct fame_list chemist_fame_list[MAX_FAME_LIST];
 struct fame_list taekwon_fame_list[MAX_FAME_LIST];
 
+#define MAP_DEFAULT_NAME "new_1-1"
+#define MAP_DEFAULT_X 53
+#define MAP_DEFAULT_Y 111
+
 #define CHAR_MAX_MSG 300	//max number of msg_conf
 static char* msg_table[CHAR_MAX_MSG]; // Login Server messages_conf
 
@@ -2950,11 +2954,7 @@ bool char_config_read(const char* cfgName, bool normal){
 				charserv_config.autosave_interval = DEFAULT_AUTOSAVE_INTERVAL;
 		} else if (strcmpi(w1, "save_log") == 0) {
 			charserv_config.save_log = config_switch(w2);
-#ifdef RENEWAL
-		} else if (strcmpi(w1, "start_point") == 0) {
-#else
 		} else if (strcmpi(w1, "start_point_pre") == 0) {
-#endif
 			char_config_split_startpoint(w1, w2, charserv_config.start_point, &charserv_config.start_point_count);
 #if PACKETVER >= 20151001
 		} else if (strcmpi(w1, "start_point_doram") == 0) {

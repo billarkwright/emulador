@@ -6058,11 +6058,6 @@ BUILDIN_FUNC(percentheal)
 	if (!script_charid2sd(4,sd))
 		return SCRIPT_CMD_SUCCESS;
 
-#ifdef RENEWAL
-	if( sd->sc.data[SC_EXTREMITYFIST2] )
-		sp = 0;
-#endif
-
 	if (sd->sc.data[SC_NORECOVER_STATE]) {
 		hp = 0;
 		sp = 0;
@@ -13630,8 +13625,6 @@ BUILDIN_FUNC(getitemslots)
 	return SCRIPT_CMD_SUCCESS;
 }
 
-// TODO: add matk here if needed/once we get rid of RENEWAL
-
 /*==========================================
  * Returns some values of an item [Lupus]
  * Price, Weight, etc...
@@ -13654,7 +13647,6 @@ BUILDIN_FUNC(getitemslots)
 		13 wlv;
 		14 view id
 		15 eLvmax
-		16 matk (renewal)
  *------------------------------------------*/
 BUILDIN_FUNC(getiteminfo)
 {
@@ -13667,11 +13659,9 @@ BUILDIN_FUNC(getiteminfo)
 
 	if (i_data && n <= 16) {
 		int *item_arr = (int*)&i_data->value_buy;
-#ifndef RENEWAL
 		if (n == 16)
 			script_pushint(st,0);
 		else
-#endif
 		script_pushint(st,item_arr[n]);
 	} else
 		script_pushint(st,-1);
@@ -17876,8 +17866,8 @@ BUILDIN_FUNC(setunitdata)
 			case UMOB_ATKMAX: md->base_status->rhw.atk2 = (unsigned short)value; calc_status = true; break;
 			case UMOB_MATKMIN: md->base_status->matk_min = (unsigned short)value; calc_status = true; break;
 			case UMOB_MATKMAX: md->base_status->matk_max = (unsigned short)value; calc_status = true; break;
-			case UMOB_DEF: md->base_status->def = (defType)value; calc_status = true; break;
-			case UMOB_MDEF: md->base_status->mdef = (defType)value; calc_status = true; break;
+			case UMOB_DEF: md->base_status->def = (signed char)value; calc_status = true; break;
+			case UMOB_MDEF: md->base_status->mdef = (signed char)value; calc_status = true; break;
 			case UMOB_HIT: md->base_status->hit = (short)value; calc_status = true; break;
 			case UMOB_FLEE: md->base_status->flee = (short)value; calc_status = true; break;
 			case UMOB_PDODGE: md->base_status->flee2 = (short)value; calc_status = true; break;
@@ -17929,8 +17919,8 @@ BUILDIN_FUNC(setunitdata)
 			case UHOM_ATKMAX: hd->base_status.rhw.atk2 = (unsigned short)value; calc_status = true; break;
 			case UHOM_MATKMIN: hd->base_status.matk_min = (unsigned short)value; calc_status = true; break;
 			case UHOM_MATKMAX: hd->base_status.matk_max = (unsigned short)value; calc_status = true; break;
-			case UHOM_DEF: hd->base_status.def = (defType)value; calc_status = true; break;
-			case UHOM_MDEF: hd->base_status.mdef = (defType)value; calc_status = true; break;
+			case UHOM_DEF: hd->base_status.def = (signed char)value; calc_status = true; break;
+			case UHOM_MDEF: hd->base_status.mdef = (signed char)value; calc_status = true; break;
 			case UHOM_HIT: hd->base_status.hit = (short)value; calc_status = true; break;
 			case UHOM_FLEE: hd->base_status.flee = (short)value; calc_status = true; break;
 			case UHOM_PDODGE: hd->base_status.flee2 = (short)value; calc_status = true; break;
@@ -17980,8 +17970,8 @@ BUILDIN_FUNC(setunitdata)
 			case UPET_ATKMAX: pd->status.rhw.atk2 = (unsigned short)value; break;
 			case UPET_MATKMIN: pd->status.matk_min = (unsigned short)value; break;
 			case UPET_MATKMAX: pd->status.matk_max = (unsigned short)value; break;
-			case UPET_DEF: pd->status.def = (defType)value; break;
-			case UPET_MDEF: pd->status.mdef = (defType)value; break;
+			case UPET_DEF: pd->status.def = (signed char)value; break;
+			case UPET_MDEF: pd->status.mdef = (signed char)value; break;
 			case UPET_HIT: pd->status.hit = (short)value; break;
 			case UPET_FLEE: pd->status.flee = (short)value; break;
 			case UPET_PDODGE: pd->status.flee2 = (short)value; break;
@@ -18028,8 +18018,8 @@ BUILDIN_FUNC(setunitdata)
 			case UMER_ATKMAX: mc->base_status.rhw.atk2 = (unsigned short)value; calc_status = true; break;
 			case UMER_MATKMIN: mc->base_status.matk_min = (unsigned short)value; calc_status = true; break;
 			case UMER_MATKMAX: mc->base_status.matk_max = (unsigned short)value; calc_status = true; break;
-			case UMER_DEF: mc->base_status.def = (defType)value; calc_status = true; break;
-			case UMER_MDEF: mc->base_status.mdef = (defType)value; calc_status = true; break;
+			case UMER_DEF: mc->base_status.def = (signed char)value; calc_status = true; break;
+			case UMER_MDEF: mc->base_status.mdef = (signed char)value; calc_status = true; break;
 			case UMER_HIT: mc->base_status.hit = (short)value; calc_status = true; break;
 			case UMER_FLEE: mc->base_status.flee = (short)value; calc_status = true; break;
 			case UMER_PDODGE: mc->base_status.flee2 = (short)value; calc_status = true; break;
@@ -18080,8 +18070,8 @@ BUILDIN_FUNC(setunitdata)
 			case UELE_ATKMAX: ed->base_status.rhw.atk2 = (unsigned short)value; calc_status = true; break;
 			case UELE_MATKMIN: ed->base_status.matk_min = (unsigned short)value; calc_status = true; break;
 			case UELE_MATKMAX: ed->base_status.matk_max = (unsigned short)value; calc_status = true; break;
-			case UELE_DEF: ed->base_status.def = (defType)value; calc_status = true; break;
-			case UELE_MDEF: ed->base_status.mdef = (defType)value; calc_status = true; break;
+			case UELE_DEF: ed->base_status.def = (signed char)value; calc_status = true; break;
+			case UELE_MDEF: ed->base_status.mdef = (signed char)value; calc_status = true; break;
 			case UELE_HIT: ed->base_status.hit = (short)value; calc_status = true; break;
 			case UELE_FLEE: ed->base_status.flee = (short)value; calc_status = true; break;
 			case UELE_PDODGE: ed->base_status.flee2 = (short)value; calc_status = true; break;
@@ -18126,8 +18116,8 @@ BUILDIN_FUNC(setunitdata)
 			case UNPC_ATKMAX: nd->status.rhw.atk2 = (unsigned short)value; break;
 			case UNPC_MATKMIN: nd->status.matk_min = (unsigned short)value; break;
 			case UNPC_MATKMAX: nd->status.matk_max = (unsigned short)value; break;
-			case UNPC_DEF: nd->status.def = (defType)value; break;
-			case UNPC_MDEF: nd->status.mdef = (defType)value; break;
+			case UNPC_DEF: nd->status.def = (signed char)value; break;
+			case UNPC_MDEF: nd->status.mdef = (signed char)value; break;
 			case UNPC_HIT: nd->status.hit = (short)value; break;
 			case UNPC_FLEE: nd->status.flee = (short)value; break;
 			case UNPC_PDODGE: nd->status.flee2 = (short)value; break;
@@ -20905,58 +20895,10 @@ BUILDIN_FUNC(useatcmd) {
 	return atcommand_sub(st,3);
 }
 
+// TODO: Deprecate [mkbu]
 BUILDIN_FUNC(checkre)
 {
-	int num;
-
-	num=script_getnum(st,2);
-	switch(num){
-		case 0:
-			#ifdef RENEWAL
-				script_pushint(st, 1);
-			#else
-				script_pushint(st, 0);
-			#endif
-			break;
-		case 1:
-			#ifdef RENEWAL_CAST
-				script_pushint(st, 1);
-			#else
-				script_pushint(st, 0);
-			#endif
-			break;
-		case 2:
-			#ifdef RENEWAL_DROP
-				script_pushint(st, 1);
-			#else
-				script_pushint(st, 0);
-			#endif
-			break;
-		case 3:
-			#ifdef RENEWAL_EXP
-				script_pushint(st, 1);
-			#else
-				script_pushint(st, 0);
-			#endif
-			break;
-		case 4:
-			#ifdef RENEWAL_LVDMG
-				script_pushint(st, 1);
-			#else
-				script_pushint(st, 0);
-			#endif
-			break;
-		case 5:
-			#ifdef RENEWAL_ASPD
-				script_pushint(st, 1);
-			#else
-				script_pushint(st, 0);
-			#endif
-			break;
-		default:
-			ShowWarning("buildin_checkre: unknown parameter.\n");
-			break;
-	}
+	script_pushint(st, 0);
 	return SCRIPT_CMD_SUCCESS;
 }
 

@@ -20,11 +20,7 @@ struct status_change;
  * Max Refine available to your server
  * Changing this limit requires edits to refine_db.txt
  **/
-#ifdef RENEWAL
-#	define MAX_REFINE 20
-#else
-#	define MAX_REFINE 10
-#endif
+#define MAX_REFINE 10
 
 /// Refine type
 enum refine_type {
@@ -840,9 +836,6 @@ enum sc_type : int16 {
 
 	SC_CHEERUP,
 
-#ifdef RENEWAL
-	SC_EXTREMITYFIST2, //! NOTE: This SC should be right before SC_MAX, so it doesn't disturb if RENEWAL is disabled
-#endif
 	SC_MAX, //Automatically updated max, used in for's to check we are within bounds.
 };
 
@@ -2071,10 +2064,6 @@ struct weapon_atk {
 	unsigned short atk, atk2;
 	unsigned short range;
 	unsigned char ele;
-#ifdef RENEWAL
-	unsigned short matk;
-	unsigned char wlv;
-#endif
 };
 
 extern sc_type SkillStatusChangeTable[MAX_SKILL];   /// skill  -> status
@@ -2095,10 +2084,6 @@ struct status_data {
 		eatk;
 	unsigned short
 		batk,
-#ifdef RENEWAL
-		watk,
-		watk2,
-#endif
 		matk_min, matk_max,
 		speed,
 		amotion, adelay, dmotion;
@@ -2106,14 +2091,9 @@ struct status_data {
 	short
 		hit, flee, cri, flee2,
 		def2, mdef2,
-#ifdef RENEWAL_ASPD
-		aspd_rate2,
-#endif
 		aspd_rate;
-	/**
-	 * defType is RENEWAL dependent and defined in src/map/config/data/const.h
-	 **/
-	defType def,mdef;
+
+	signed char def,mdef;
 
 	unsigned char
 		def_ele, ele_lv,
@@ -2196,12 +2176,8 @@ struct status_change {
 	} cant;/* status change state flags */
 	//int sg_id; //ID of the previous Storm gust that hit you
 	short comet_x, comet_y; // Point where src casted Comet - required to calculate damage from this point
-/**
- * The Storm Gust counter was dropped in renewal
- **/
-#ifndef RENEWAL
+
 	unsigned char sg_counter; //Storm gust counter (previous hits from storm gust)
-#endif
 	unsigned char bs_counter; // Blood Sucker counter
 	struct status_change_entry *data[SC_MAX];
 };
@@ -2255,7 +2231,7 @@ int status_get_lv(struct block_list *bl);
 #define status_get_luk(bl) status_get_status_data(bl)->luk
 #define status_get_hit(bl) status_get_status_data(bl)->hit
 #define status_get_flee(bl) status_get_status_data(bl)->flee
-defType status_get_def(struct block_list *bl);
+signed char status_get_def(struct block_list *bl);
 #define status_get_mdef(bl) status_get_status_data(bl)->mdef
 #define status_get_flee2(bl) status_get_status_data(bl)->flee2
 #define status_get_def2(bl) status_get_status_data(bl)->def2
@@ -2351,13 +2327,8 @@ int status_check_visibility(struct block_list *src, struct block_list *target);
 
 int status_change_spread(struct block_list *src, struct block_list *bl, bool type);
 
-#ifndef RENEWAL
-	unsigned short status_base_matk_min(const struct status_data* status);
-	unsigned short status_base_matk_max(const struct status_data* status);
-#else
-	unsigned int status_weapon_atk(struct weapon_atk wa, struct map_session_data *sd);
-	unsigned short status_base_matk(struct block_list *bl, const struct status_data* status, int level);
-#endif
+unsigned short status_base_matk_min(const struct status_data* status);
+unsigned short status_base_matk_max(const struct status_data* status);
 
 unsigned short status_base_atk(const struct block_list *bl, const struct status_data *status);
 

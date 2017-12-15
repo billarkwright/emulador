@@ -19,7 +19,7 @@
 
 char grf_list_file[256] = "conf/grf-files.txt";
 char map_list_file[256] = "db/map_index.txt";
-char map_cache_file[256];
+char map_cache_file[256] = "db/map_cache.dat";
 int rebuild = 0;
 
 FILE *map_cache_fp;
@@ -198,15 +198,6 @@ int do_init(int argc, char** argv)
 	char line[1024];
 	struct map_data map;
 	char name[MAP_NAME_LENGTH_EXT];
-
-	/* setup pre-defined, #define-dependant */
-	sprintf(map_cache_file,"db/%s/map_cache.dat",
-#ifdef RENEWAL
-			"re"
-#else
-			"pre-re"
-#endif
-			);
 
 	// Process the command-line arguments
 	process_args(argc, argv);

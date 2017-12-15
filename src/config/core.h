@@ -81,7 +81,6 @@
  * No settings past this point
  **/
 #include "./packets.h"
-#include "./renewal.h"
 #include "./secure.h"
 #include "./classes/general.h"
 

@@ -60,9 +60,6 @@ int pc_split_atoui(char* str, unsigned int* val, char sep, int max);
 #define MAX_LEVEL_JOB_EXP 999999999 ///< Max Job EXP for player on Max Job Level
 
 static unsigned int statp[MAX_LEVEL+1];
-#if defined(RENEWAL_DROP) || defined(RENEWAL_EXP)
-static unsigned int level_penalty[3][CLASS_MAX][MAX_LEVEL*2+1];
-#endif
 
 // h-files are for declarations, not for implementations... [Shinomori]
 struct skill_tree_entry skill_tree[CLASS_COUNT][MAX_SKILL_TREE];
@@ -1039,7 +1036,6 @@ static bool pc_isItemClass (struct map_session_data *sd, struct item_data* item)
 	while (1) {
 		if (item->class_upper&ITEMJ_NORMAL && !(sd->class_&(JOBL_UPPER|JOBL_THIRD|JOBL_BABY)))	//normal classes (no upper, no baby, no third)
 			break;
-#ifndef RENEWAL
 		//allow third classes to use trans. class items
 		if (item->class_upper&ITEMJ_UPPER && sd->class_&(JOBL_UPPER|JOBL_THIRD))	//trans. classes
 			break;
@@ -1050,23 +1046,6 @@ static bool pc_isItemClass (struct map_session_data *sd, struct item_data* item)
 		//items for third classes can be used for all third classes
 		if (item->class_upper&(ITEMJ_THIRD|ITEMJ_THIRD_TRANS|ITEMJ_THIRD_BABY) && sd->class_&JOBL_THIRD)
 			break;
-#else
-		//trans. classes (exl. third-trans.)
-		if (item->class_upper&ITEMJ_UPPER && sd->class_&JOBL_UPPER && !(sd->class_&JOBL_THIRD))
-			break;
-		//baby classes (exl. third-baby)
-		if (item->class_upper&ITEMJ_BABY && sd->class_&JOBL_BABY && !(sd->class_&JOBL_THIRD))
-			break;
-		//third classes (exl. third-trans. and baby-third)
-		if (item->class_upper&ITEMJ_THIRD && sd->class_&JOBL_THIRD && !(sd->class_&(JOBL_UPPER|JOBL_BABY)))
-			break;
-		//trans-third classes
-		if (item->class_upper&ITEMJ_THIRD_TRANS && sd->class_&JOBL_THIRD && sd->class_&JOBL_UPPER)
-			break;
-		//third-baby classes
-		if (item->class_upper&ITEMJ_THIRD_BABY && sd->class_&JOBL_THIRD && sd->class_&JOBL_BABY)
-			break;
-#endif
 		return false;
 	}
 	return true;
@@ -2565,23 +2544,14 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 			break;
 		case SP_BASE_ATK:
 			if(sd->state.lr_flag != 2) {
-#ifdef RENEWAL
-				bonus = sd->bonus.eatk + val;
-				sd->bonus.eatk = cap_value(bonus, SHRT_MIN, SHRT_MAX);
-#else
 				bonus = status->batk + val;
 				status->batk = cap_value(bonus, 0, USHRT_MAX);
-#endif
 			}
 			break;
 		case SP_DEF1:
 			if(sd->state.lr_flag != 2) {
 				bonus = status->def + val;
-#ifdef RENEWAL
-				status->def = cap_value(bonus, SHRT_MIN, SHRT_MAX);
-#else
 				status->def = cap_value(bonus, CHAR_MIN, CHAR_MAX);
-#endif
 			}
 			break;
 		case SP_DEF2:
@@ -2593,11 +2563,7 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 		case SP_MDEF1:
 			if(sd->state.lr_flag != 2) {
 				bonus = status->mdef + val;
-#ifdef RENEWAL
-				status->mdef = cap_value(bonus, SHRT_MIN, SHRT_MAX);
-#else
 				status->mdef = cap_value(bonus, CHAR_MIN, CHAR_MAX);
-#endif
 				if( sd->state.lr_flag == 3 ) {//Shield, used for royal guard
 					sd->bonus.shieldmdef += bonus;
 				}
@@ -2725,11 +2691,7 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 			break;
 		case SP_ASPD_RATE:	//Stackable increase - Made it linear as per rodatazone
 			if(sd->state.lr_flag != 2)
-#ifndef RENEWAL_ASPD
 				status->aspd_rate -= 10*val;
-#else
-				status->aspd_rate2 += val;
-#endif
 			break;
 		case SP_HP_RECOV_RATE:
 			if(sd->state.lr_flag != 2)
@@ -3088,36 +3050,16 @@ void pc_bonus(struct map_session_data *sd,int type,int val)
 			if(sd->state.lr_flag != 2)
 				sd->bonus.ematk += val;
 			break;
-#ifdef RENEWAL_CAST
-		case SP_FIXCASTRATE:
-			if(sd->state.lr_flag != 2)
-				sd->bonus.fixcastrate = min(sd->bonus.fixcastrate,val);
-			break;
-		case SP_ADD_FIXEDCAST:
-			if(sd->state.lr_flag != 2)
-				sd->bonus.add_fixcast += val;
-			break;
-		case SP_CASTRATE:
-		case SP_VARCASTRATE:
-			if(sd->state.lr_flag != 2)
-				sd->bonus.varcastrate -= val;
-			break;
-		case SP_ADD_VARIABLECAST:
-			if(sd->state.lr_flag != 2)
-				sd->bonus.add_varcast += val;
-			break;
-#else
 		case SP_ADD_FIXEDCAST:
 		case SP_FIXCASTRATE:
 		case SP_ADD_VARIABLECAST:
-			//ShowWarning("pc_bonus: non-RENEWAL_CAST doesn't support this bonus %d.\n", type);
+			ShowWarning("pc_bonus: This bonus is not supported - %d.\n", type);
 			break;
 		case SP_VARCASTRATE:
 		case SP_CASTRATE:
 			if(sd->state.lr_flag != 2)
 				sd->castrate += val;
 			break;
-#endif
 		case SP_ADDMAXWEIGHT:
 			if (sd->state.lr_flag != 2)
 				sd->add_max_weight += val;
@@ -3675,77 +3617,10 @@ void pc_bonus2(struct map_session_data *sd,int type,int type2,int val)
 			sd->skillcooldown[i].val = val;
 		}
 		break;
-#ifdef RENEWAL_CAST
-	case SP_SKILL_FIXEDCAST: // bonus2 bSkillFixedCast,sk,t;
-		if(sd->state.lr_flag == 2)
-			break;
-		ARR_FIND(0, ARRAYLENGTH(sd->skillfixcast), i, sd->skillfixcast[i].id == 0 || sd->skillfixcast[i].id == type2);
-		if (i == ARRAYLENGTH(sd->skillfixcast))
-		{
-			ShowError("pc_bonus2: SP_SKILL_FIXEDCAST: Reached max (%d) number of skills per character, bonus skill %d (%d) lost.\n", ARRAYLENGTH(sd->skillfixcast), type2, val);
-			break;
-		}
-		if (sd->skillfixcast[i].id == type2)
-			sd->skillfixcast[i].val += val;
-		else {
-			sd->skillfixcast[i].id = type2;
-			sd->skillfixcast[i].val = val;
-		}
-		break;
-	case SP_SKILL_VARIABLECAST: // bonus2 bSkillVariableCast,sk,t;
-		if(sd->state.lr_flag == 2)
-			break;
-		ARR_FIND(0, ARRAYLENGTH(sd->skillvarcast), i, sd->skillvarcast[i].id == 0 || sd->skillvarcast[i].id == type2);
-		if (i == ARRAYLENGTH(sd->skillvarcast))
-		{
-			ShowError("pc_bonus2: SP_SKILL_VARIABLECAST: Reached max (%d) number of skills per character, bonus skill %d (%d) lost.\n", ARRAYLENGTH(sd->skillvarcast), type2, val);
-			break;
-		}
-		if (sd->skillvarcast[i].id == type2)
-			sd->skillvarcast[i].val += val;
-		else {
-			sd->skillvarcast[i].id = type2;
-			sd->skillvarcast[i].val = val;
-		}
-		break;
-	case SP_CASTRATE: // bonus2 bCastrate,sk,n;
-	case SP_VARCASTRATE: // bonus2 bVariableCastrate,sk,n;
-		if(sd->state.lr_flag == 2)
-			break;
-		ARR_FIND(0, ARRAYLENGTH(sd->skillcastrate), i, sd->skillcastrate[i].id == 0 || sd->skillcastrate[i].id == type2);
-		if (i == ARRAYLENGTH(sd->skillcastrate))
-		{
-			ShowError("pc_bonus2: SP_VARCASTRATE: Reached max (%d) number of skills per character, bonus skill %d (%d%%) lost.\n",ARRAYLENGTH(sd->skillcastrate), type2, val);
-			break;
-		}
-		if(sd->skillcastrate[i].id == type2)
-			sd->skillcastrate[i].val -= val;
-		else {
-			sd->skillcastrate[i].id = type2;
-			sd->skillcastrate[i].val -= val;
-		}
-		break;
-	case SP_FIXCASTRATE: // bonus2 bFixedCastrate,sk,n;
-		if(sd->state.lr_flag == 2)
-			break;
-		ARR_FIND(0, ARRAYLENGTH(sd->skillfixcastrate), i, sd->skillfixcastrate[i].id == 0 || sd->skillfixcastrate[i].id == type2);
-		if (i == ARRAYLENGTH(sd->skillfixcastrate))
-		{
-			ShowError("pc_bonus2: SP_FIXCASTRATE: Reached max (%d) number of skills per character, bonus skill %d (%d%%) lost.\n", ARRAYLENGTH(sd->skillfixcastrate), type2, val);
-			break;
-		}
-		if(sd->skillfixcastrate[i].id == type2)
-			sd->skillfixcastrate[i].val -= val;
-		else {
-			sd->skillfixcastrate[i].id = type2;
-			sd->skillfixcastrate[i].val -= val;
-		}
-		break;
-#else
 	case SP_SKILL_FIXEDCAST: // bonus2 bSkillFixedCast,sk,t;
 	case SP_SKILL_VARIABLECAST: // bonus2 bSkillVariableCast,sk,t;
 	case SP_FIXCASTRATE: // bonus2 bFixedCastrate,sk,n;
-		//ShowWarning("pc_bonus2: Non-RENEWAL_CAST doesn't support this bonus %d.\n", type);
+		ShowWarning("pc_bonus: This bonus is not supported - %d.\n", type);
 		break;
 	case SP_VARCASTRATE: // bonus2 bVariableCastrate,sk,n;
 	case SP_CASTRATE: // bonus2 bCastrate,sk,n;
@@ -3765,7 +3640,6 @@ void pc_bonus2(struct map_session_data *sd,int type,int type2,int val)
 			sd->skillcastrate[i].val = val;
 		}
 		break;
-#endif
 	case SP_SKILL_USE_SP: // bonus2 bSkillUseSP,sk,n;
 		if(sd->state.lr_flag == 2)
 			break;
@@ -5005,7 +4879,7 @@ int pc_useitem(struct map_session_data *sd,int n)
 			clif_progressbar_abort(sd);
 			return 0; // First item use attempt cancels the progress bar
 		}
-#ifdef RENEWAL
+#ifdef DISPLAY_MSG_WIP
 		if (pc_hasprogress(sd, WIP_DISABLE_SKILLITEM)) {
 			clif_msg(sd, WORK_IN_PROGRESS);
 			return 0;
@@ -6920,13 +6794,7 @@ int pc_gets_status_point(int level)
 		return ((level+15) / 5);
 }
 
-#ifdef RENEWAL_STAT
-/// Renewal status point cost formula
-#define PC_STATUS_POINT_COST(low) (((low) < 100) ? (2 + ((low) - 1) / 10) : (16 + 4 * (((low) - 100) / 5)))
-#else
-/// Pre-Renewal status point cost formula
 #define PC_STATUS_POINT_COST(low) (( 1 + ((low) + 9) / 10 ))
-#endif
 
 /// Returns the number of stat points needed to change the specified stat by val.
 /// If val is negative, returns the number of stat points that would be needed to
@@ -8055,13 +7923,7 @@ int pc_readparam(struct map_session_data* sd,int type)
 		case SP_SPRATE:		     val = sd->dsprate; break;
 		case SP_SPEED_RATE:	     val = sd->bonus.speed_rate; break;
 		case SP_SPEED_ADDRATE:   val = sd->bonus.speed_add_rate; break;
-		case SP_ASPD_RATE:
-#ifndef RENEWAL_ASPD
-			val = sd->battle_status.aspd_rate;
-#else
-			val = sd->battle_status.aspd_rate2;
-#endif
-			break;
+		case SP_ASPD_RATE:       val = sd->battle_status.aspd_rate; break;
 		case SP_HP_RECOV_RATE:   val = sd->hprecov_rate; break;
 		case SP_SP_RECOV_RATE:   val = sd->sprecov_rate; break;
 		case SP_CRITICAL_DEF:    val = sd->bonus.critical_def; break;
@@ -8132,12 +7994,7 @@ int pc_readparam(struct map_session_data* sd,int type)
 		case SP_ADD_FIXEDCAST:   val = sd->bonus.add_fixcast; break;
 		case SP_ADD_VARIABLECAST:  val = sd->bonus.add_varcast; break;
 		case SP_CASTRATE:
-		case SP_VARCASTRATE:
-#ifdef RENEWAL_CAST
-			val = sd->bonus.varcastrate; break;
-#else
-			val = sd->castrate; break;
-#endif
+		case SP_VARCASTRATE:	val = sd->castrate; break;
 		default:
 			ShowError("pc_readparam: Attempt to read unknown parameter '%d'.\n", type);
 			return -1;
@@ -8427,10 +8284,6 @@ int pc_itemheal(struct map_session_data *sd, int itemid, int hp, int sp)
 			sp -= sp * penalty / 100;
 		}
 
-#ifdef RENEWAL
-		if (sd->sc.data[SC_EXTREMITYFIST2])
-			sp = 0;
-#endif
 		if (sd->sc.data[SC_BITESCAR])
 			hp = 0;
 	}
@@ -10740,32 +10593,6 @@ void pc_delspiritcharm(struct map_session_data *sd, int count, int type)
 	clif_spiritcharm(sd);
 }
 
-#if defined(RENEWAL_DROP) || defined(RENEWAL_EXP)
-/**
- * Renewal EXP/Item Drop rate modifier based on level penalty
- * @param level_diff: Monster and Player level difference
- * @param mob_class: Monster class
- * @param mode: Monster mode
- * @param type: 1 - EXP, 2 - Item Drop
- * @return Penalty rate
- */
-int pc_level_penalty_mod(int level_diff, uint32 mob_class, enum e_mode mode, int type)
-{
-	int rate = 100;
-
-	if (type == 2 && (mode&MD_FIXED_ITEMDROP))
-		return rate;
-
-	if (level_diff < 0)
-		level_diff = MAX_LEVEL + (~level_diff + 1);
-
-	if ((rate = level_penalty[type][mob_class][level_diff]) > 0) // Monster class found, return rate
-		return rate;
-
-	return 100; // Penalty not found, return default
-}
-#endif
-
 int pc_split_str(char *str,char **val,int num)
 {
 	int i;
@@ -10914,35 +10741,6 @@ static bool pc_readdb_skilltree(char* fields[], int columns, int current)
 	}
 	return true;
 }
-#if defined(RENEWAL_DROP) || defined(RENEWAL_EXP)
-static bool pc_readdb_levelpenalty(char* fields[], int columns, int current)
-{
-	int type, class_, diff;
-
-	type = atoi(fields[0]); //1=experience, 2=item drop
-	class_ = atoi(fields[1]);
-	diff = atoi(fields[2]);
-
-	if( type != 1 && type != 2 ){
-		ShowWarning("pc_readdb_levelpenalty: Invalid type %d specified.\n", type);
-		return false;
-	}
-
-	if( !CHK_CLASS(class_) ){
-		ShowWarning("pc_readdb_levelpenalty: Invalid class %d specified.\n", class_);
-		return false;
-	}
-
-	diff = min(diff, MAX_LEVEL);
-
-	if( diff < 0 )
-		diff = min(MAX_LEVEL + ( ~(diff) + 1 ), MAX_LEVEL*2);
-
-	level_penalty[type][class_][diff] = atoi(fields[3]);
-
-	return true;
-}
-#endif
 
 /** [Cydh]
 * Calculates base hp of player. Reference: http://irowiki.org/wiki/Max_HP
@@ -10955,9 +10753,7 @@ static unsigned int pc_calc_basehp(uint16 level, uint16 class_) {
 	uint16 i, idx = pc_class2idx(class_);
 
 	base_hp = 35 + level * (job_info[idx].hp_multiplicator/100.);
-#ifndef RENEWAL
 	if(level >= 10 && (class_ == JOB_NINJA || class_ == JOB_GUNSLINGER)) base_hp += 90;
-#endif
 	for (i = 2; i <= level; i++)
 		base_hp += floor(((job_info[idx].hp_factor/100.) * i) + 0.5); //Don't have round()
 	if (class_ == JOB_SUMMONER)
@@ -11016,11 +10812,7 @@ static bool pc_readdb_job1(char* fields[], int columns, int current){
 	job_info[idx].hp_multiplicator = atoi(fields[3]);
 	job_info[idx].sp_factor  = atoi(fields[4]);
 
-#ifdef RENEWAL_ASPD
-	for(i = 0; i <= MAX_WEAPON_TYPE; i++)
-#else
 	for(i = 0; i < MAX_WEAPON_TYPE; i++)
-#endif
 	{
 		job_info[idx].aspd_base[i] = atoi(fields[i+5]);
 	}
@@ -11304,36 +11096,17 @@ void pc_readdb(void) {
 	//reset
 	memset(job_info,0,sizeof(job_info)); // job_info table
 
-#if defined(RENEWAL_DROP) || defined(RENEWAL_EXP)
-	sv_readdb(db_path, "re/level_penalty.txt", ',', 4, 4, -1, &pc_readdb_levelpenalty, 0);
-	sv_readdb(db_path, DBIMPORT"/level_penalty.txt", ',', 4, 4, -1, &pc_readdb_levelpenalty, 1);
-	for( k=1; k < 3; k++ ){ // fill in the blanks
-		int j;
-		for( j = 0; j < CLASS_ALL; j++ ){
-			int tmp = 0;
-			for( i = 0; i < MAX_LEVEL*2; i++ ){
-				if( i == MAX_LEVEL+1 )
-					tmp = level_penalty[k][j][0];// reset
-				if( level_penalty[k][j][i] > 0 )
-					tmp = level_penalty[k][j][i];
-				else
-					level_penalty[k][j][i] = tmp;
-			}
-		}
-	}
-#endif
-
 	 // reset then read statspoint
 	memset(statp,0,sizeof(statp));
 	for(i=0; i<ARRAYLENGTH(dbsubpath); i++){
 		uint8 n1 = (uint8)(strlen(db_path)+strlen(dbsubpath[i])+1);
-		uint8 n2 = (uint8)(strlen(db_path)+strlen(DBPATH)+strlen(dbsubpath[i])+1);
+		uint8 n2 = (uint8)(strlen(db_path)+strlen(dbsubpath[i])+1);
 		char* dbsubpath1 = (char*)aMalloc(n1+1);
 		char* dbsubpath2 = (char*)aMalloc(n2+1);
 
 		if(i==0) {
 			safesnprintf(dbsubpath1,n1,"%s%s",db_path,dbsubpath[i]);
-			safesnprintf(dbsubpath2,n2,"%s/%s%s",db_path,DBPATH,dbsubpath[i]);
+			safesnprintf(dbsubpath2,n2,"%s/%s",db_path,dbsubpath[i]);
 		}
 		else {
 			safesnprintf(dbsubpath1,n1,"%s%s",db_path,dbsubpath[i]);
@@ -11342,11 +11115,7 @@ void pc_readdb(void) {
 
 		s = pc_read_statsdb(dbsubpath2,s,i > 0);
 		if (i == 0)
-#ifdef RENEWAL_ASPD
-			sv_readdb(dbsubpath1, "re/job_db1.txt",',',6+MAX_WEAPON_TYPE,6+MAX_WEAPON_TYPE,CLASS_COUNT,&pc_readdb_job1, i > 0);
-#else
 			sv_readdb(dbsubpath1, "pre-re/job_db1.txt",',',5+MAX_WEAPON_TYPE,5+MAX_WEAPON_TYPE,CLASS_COUNT,&pc_readdb_job1, i > 0);
-#endif
 		else
 			sv_readdb(dbsubpath1, "job_db1.txt",',',5+MAX_WEAPON_TYPE,6+MAX_WEAPON_TYPE,CLASS_COUNT,&pc_readdb_job1, i > 0);
 		sv_readdb(dbsubpath1, "job_db2.txt",',',1,1+MAX_LEVEL,CLASS_COUNT,&pc_readdb_job2, i > 0);
@@ -11362,8 +11131,8 @@ void pc_readdb(void) {
 
 	// Reset and read skilltree - needs to be read after pc_readdb_job_exp to get max base and job levels
 	memset(skill_tree, 0, sizeof(skill_tree));
-	sv_readdb(db_path, DBPATH"skill_tree.txt", ',', 3 + MAX_PC_SKILL_REQUIRE * 2, 5 + MAX_PC_SKILL_REQUIRE * 2, -1, &pc_readdb_skilltree, 0);
-	sv_readdb(db_path, DBIMPORT"/skill_tree.txt", ',', 3 + MAX_PC_SKILL_REQUIRE * 2, 5 + MAX_PC_SKILL_REQUIRE * 2, -1, &pc_readdb_skilltree, 1);
+	sv_readdb(db_path, "skill_tree.txt", ',', 3 + MAX_PC_SKILL_REQUIRE * 2, 5 + MAX_PC_SKILL_REQUIRE * 2, -1, &pc_readdb_skilltree, 0);
+	sv_readdb(db_path, "import/skill_tree.txt", ',', 3 + MAX_PC_SKILL_REQUIRE * 2, 5 + MAX_PC_SKILL_REQUIRE * 2, -1, &pc_readdb_skilltree, 1);
 
 	// generate the remaining parts of the db if necessary
 	k = battle_config.use_statpoint_table; //save setting

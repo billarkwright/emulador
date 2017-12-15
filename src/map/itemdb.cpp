@@ -1315,11 +1315,7 @@ static bool itemdb_parse_dbrow(char** str, const char* source, int line, int scr
 			id->value_buy, id->value_sell, nameid, id->jname);
 
 	id->weight = atoi(str[6]);
-#ifdef RENEWAL
-	itemdb_re_split_atoi(str[7],&id->atk,&id->matk);
-#else
 	id->atk = atoi(str[7]);
-#endif
 	id->def = atoi(str[8]);
 	id->range = atoi(str[9]);
 	id->slot = atoi(str[10]);
@@ -1388,10 +1384,7 @@ static bool itemdb_parse_dbrow(char** str, const char* source, int line, int scr
 * item_db2 overwriting item_db
 */
 static int itemdb_readdb(void){
-	const char* filename[] = {
-		DBPATH"item_db.txt",
-		DBIMPORT"/item_db.txt" 
-	};
+	const char* filename[] = { "item_db.txt", "import/item_db.txt" };
 
 	int fi;
 
@@ -1784,14 +1777,14 @@ static void itemdb_read(void) {
 	
 	for(i=0; i<ARRAYLENGTH(dbsubpath); i++){
 		uint8 n1 = (uint8)(strlen(db_path)+strlen(dbsubpath[i])+1);
-		uint8 n2 = (uint8)(strlen(db_path)+strlen(DBPATH)+strlen(dbsubpath[i])+1);
+		uint8 n2 = (uint8)(strlen(db_path)+strlen(dbsubpath[i])+1);
 		char* dbsubpath1 = (char*)aMalloc(n1+1);
 		char* dbsubpath2 = (char*)aMalloc(n2+1);
 		
 
 		if(i==0) {
 			safesnprintf(dbsubpath1,n1,"%s%s",db_path,dbsubpath[i]);
-			safesnprintf(dbsubpath2,n2,"%s/%s%s",db_path,DBPATH,dbsubpath[i]);
+			safesnprintf(dbsubpath2,n2,"%s/%s",db_path,dbsubpath[i]);
 		}
 		else {
 			safesnprintf(dbsubpath1,n1,"%s%s",db_path,dbsubpath[i]);
@@ -1808,7 +1801,7 @@ static void itemdb_read(void) {
 		sv_readdb(dbsubpath1, "item_findingore.txt",	',', 2, 10, -1, &itemdb_read_group, i > 0);
 		sv_readdb(dbsubpath2, "item_giftbox.txt",		',', 2, 10, -1, &itemdb_read_group, i > 0);
 		sv_readdb(dbsubpath2, "item_misc.txt",			',', 2, 10, -1, &itemdb_read_group, i > 0);
-#ifdef RENEWAL
+#ifdef ENABLE_ITEM_PACKAGES
 		sv_readdb(dbsubpath2, "item_package.txt",		',', 2, 10, -1, &itemdb_read_group, i > 0);
 #endif
 		itemdb_read_combos(dbsubpath2,i > 0); //TODO change this to sv_read ? id#script ?

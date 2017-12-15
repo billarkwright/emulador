@@ -1066,7 +1066,7 @@ int party_send_xy_clear(struct party_data *p)
 
 /** Party EXP and Zeny sharing
  * @param p Party data
- * @param src EXP source (for renewal level penalty)
+ * @param src EXP source
  * @param base_exp Base EXP gained from killed mob
  * @param job_exp Job EXP gained from killed mob
  * @param zeny Zeny gained from killed mob
@@ -1076,12 +1076,6 @@ void party_exp_share(struct party_data* p, struct block_list* src, unsigned int 
 {
 	struct map_session_data* sd[MAX_PARTY];
 	unsigned int i, c;
-#ifdef RENEWAL_EXP
-	TBL_MOB *md = BL_CAST(BL_MOB, src);
-
-	if (!md)
-		return;
-#endif
 
 	nullpo_retv(p);
 
@@ -1110,21 +1104,7 @@ void party_exp_share(struct party_data* p, struct block_list* src, unsigned int 
 	}
 
 	for (i = 0; i < c; i++) {
-#ifdef RENEWAL_EXP
-		uint32 base_gained = base_exp, job_gained = job_exp;
-		if (base_exp || job_exp) {
-			int rate = pc_level_penalty_mod(md->level - sd[i]->status.base_level, md->db->status.class_, md->db->status.mode, 1);
-			if (rate != 100) {
-				if (base_exp)
-					base_gained = (unsigned int)cap_value(apply_rate(base_exp, rate), 1, UINT_MAX);
-				if (job_exp)
-					job_gained = (unsigned int)cap_value(apply_rate(job_exp, rate), 1, UINT_MAX);
-			}
-		}
-		pc_gainexp(sd[i], src, base_gained, job_gained, 0);
-#else
 		pc_gainexp(sd[i], src, base_exp, job_exp, 0);
-#endif
 
 		if (zeny) // zeny from mobs [Valaris]
 			pc_getzeny(sd[i],zeny,LOG_TYPE_PICKDROP_MONSTER,NULL);

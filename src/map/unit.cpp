@@ -1771,12 +1771,10 @@ int unit_skilluse_id2(struct block_list *src, int target_id, uint16 skill_id, ui
 		case SA_SPELLBREAKER:
 			combo = 1;
 		break;
-#ifndef RENEWAL_CAST
 		case ST_CHASEWALK:
 			if (sc && sc->data[SC_CHASEWALK])
 				casttime = -1;
 		break;
-#endif
 		case TK_RUN:
 			if (sc && sc->data[SC_RUN])
 				casttime = -1;
@@ -1785,7 +1783,6 @@ int unit_skilluse_id2(struct block_list *src, int target_id, uint16 skill_id, ui
 			if( sc && sc->data[SC_BASILICA] )
 				casttime = -1; // No Casting time on basilica cancel
 		break;
-#ifndef RENEWAL_CAST
 		case KN_CHARGEATK:
 		{
 			unsigned int k = (distance_bl(src,target)-1)/3; //Range 0-3: 500ms, Range 4-6: 1000ms, Range 7+: 1500ms
@@ -1794,7 +1791,6 @@ int unit_skilluse_id2(struct block_list *src, int target_id, uint16 skill_id, ui
 			casttime += casttime * k;
 		}
 		break;
-#endif
 		case GD_EMERGENCYCALL: // Emergency Call double cast when the user has learned Leap [Daegaladh]
 			if (sd && (pc_checkskill(sd,TK_HIGHJUMP) || pc_checkskill(sd,SU_LOPE) >= 3))
 				casttime *= 2;
@@ -1823,11 +1819,7 @@ int unit_skilluse_id2(struct block_list *src, int target_id, uint16 skill_id, ui
 	}
 
 	// Moved here to prevent Suffragium from ending if skill fails
-#ifndef RENEWAL_CAST
 	casttime = skill_castfix_sc(src, casttime, skill_get_castnodex(skill_id));
-#else
-	casttime = skill_vfcastfix(src, casttime, skill_id, skill_lv);
-#endif
 
 	if(!ud->state.running) // Need TK_RUN or WUGDASH handler to be done before that, see bugreport:6026
 		unit_stop_walking(src, 1); // Even though this is not how official works but this will do the trick. bugreport:6829
@@ -2035,11 +2027,7 @@ int unit_skilluse_pos2( struct block_list *src, short skill_x, short skill_y, ui
 	unit_stop_attack(src);
 
 	// Moved here to prevent Suffragium from ending if skill fails
-#ifndef RENEWAL_CAST
 	casttime = skill_castfix_sc(src, casttime, skill_get_castnodex(skill_id));
-#else
-	casttime = skill_vfcastfix(src, casttime, skill_id, skill_lv );
-#endif
 
 	ud->state.skillcastcancel = castcancel&&casttime>0?1:0;
 	if (!sd || sd->skillitem != skill_id || skill_get_cast(skill_id, skill_lv))

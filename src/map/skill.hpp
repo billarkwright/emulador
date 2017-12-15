@@ -207,9 +207,6 @@ struct s_skill_db {
 
 	// skill_cast_db.txt
 	int cast[MAX_SKILL_LEVEL];				 ///< Variable casttime
-#ifdef RENEWAL_CAST
-	int fixed_cast[MAX_SKILL_LEVEL];			 ///< If -1 means 20% than 'cast'
-#endif
 	int walkdelay[MAX_SKILL_LEVEL];			 ///< Delay to walk after casting
 	int delay[MAX_SKILL_LEVEL];				 ///< Global delay (delay before reusing all skills)
 	int cooldown[MAX_SKILL_LEVEL];			 ///< Cooldown (delay before reusing same skill)
@@ -472,9 +469,6 @@ void skill_getareachar_skillunit_visibilty_single(struct skill_unit *su, struct 
 
 int skill_castfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv);
 int skill_castfix_sc(struct block_list *bl, double time, uint8 flag);
-#ifdef RENEWAL_CAST
-int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 skill_lv);
-#endif
 int skill_delayfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv);
 void skill_toggle_magicpower(struct block_list *bl, uint16 skill_id);
 

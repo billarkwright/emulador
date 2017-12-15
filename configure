@@ -3258,26 +3258,6 @@ fi
 
 
 #
-# renewal
-#
-# Check whether --enable-prere was given.
-if test "${enable_prere+set}" = set; then :
-  enableval=$enable_prere;
-		enable_prere="$enableval"
-		case $enableval in
-			"no");;
-			"yes");;
-			*) as_fn_error $? "invalid argument --enable-prere=$enableval... stopping" "$LINENO" 5;;
-		esac
-
-else
-  enable_prere="no"
-
-fi
-
-
-
-#
 # VIP
 #
 # Check whether --enable-vip was given.
@@ -5945,19 +5925,6 @@ case $enable_debug in
 		    echo "error: --enable-debug flag=$enable_debug entered but the compiler does not support -g"
 		    exit 1
                 fi
-		;;
-esac
-
-#
-# Renewal
-#
-case $enable_prere in
-	"no")
-		# default value
-		CPPFLAGS="$CPPFLAGS"
-		;;
-	"yes")
-		CPPFLAGS="$CPPFLAGS -DPRERE"
 		;;
 esac
 

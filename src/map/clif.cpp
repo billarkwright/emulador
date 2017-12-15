@@ -1516,24 +1516,15 @@ void clif_hominfo(struct map_session_data *sd, struct homun_data *hd, int flag)
 	WBUFW(buf,29) = hd->homunculus.hunger;
 	WBUFW(buf,31) = (unsigned short) (hd->homunculus.intimacy / 100) ;
 	WBUFW(buf,33) = 0; // equip id
-#ifdef RENEWAL
-	WBUFW(buf,35) = cap_value(status->rhw.atk2, 0, INT16_MAX);
-#else
 	WBUFW(buf,35) = cap_value(status->rhw.atk2+status->batk, 0, INT16_MAX);
-#endif
 	WBUFW(buf,37)=i16min(status->matk_max, INT16_MAX); //FIXME capping to INT16 here is too late
 	WBUFW(buf,39)=status->hit;
 	if (battle_config.hom_setting&HOMSET_DISPLAY_LUK)
 		WBUFW(buf,41) = status->luk/3 + 1;	//crit is a +1 decimal value! Just display purpose.[Vicious]
 	else
 		WBUFW(buf,41) = status->cri/10;
-#ifdef RENEWAL
-	WBUFW(buf,43) = status->def + status->def2;
-	WBUFW(buf,45) = status->mdef + status->mdef2;
-#else
 	WBUFW(buf,43) = status->def + status->vit;
 	WBUFW(buf,45) = status->mdef;
-#endif
 	WBUFW(buf,47) = status->flee;
 	WBUFW(buf,49) = (flag) ? 0 : status->amotion;
 #if PACKETVER >= 20141016
@@ -3236,11 +3227,7 @@ void clif_updatestatus(struct map_session_data *sd,int type)
 			//negative check (in case you have something like Berserk active)
 			int mdef2 = pc_rightside_mdef(sd);
 
-			WFIFOL(fd,4)=
-#ifndef RENEWAL
-			( mdef2 < 0 ) ? 0 :
-#endif
-			mdef2;
+			WFIFOL(fd,4)=( mdef2 < 0 ) ? 0 : mdef2;
 
 		}
 		break;
@@ -3659,11 +3646,7 @@ void clif_initialstatus(struct map_session_data *sd) {
 	WBUFW(buf,26) = pc_rightside_def(sd);
 	WBUFW(buf,28) = pc_leftside_mdef(sd);
 	mdef2 = pc_rightside_mdef(sd);
-	WBUFW(buf,30) =
-#ifndef RENEWAL
-		( mdef2 < 0 ) ? 0 : //Negative check for Frenzy'ed characters.
-#endif
-		mdef2;
+	WBUFW(buf,30) = ( mdef2 < 0 ) ? 0 : mdef2; //Negative check for Frenzy'ed characters.
 	WBUFW(buf,32) = sd->battle_status.hit;
 	WBUFW(buf,34) = sd->battle_status.flee;
 	WBUFW(buf,36) = sd->battle_status.flee2/10;
@@ -11475,12 +11458,6 @@ void clif_parse_NpcClicked(int fd,struct map_session_data *sd)
 		clif_clearunit_area(&sd->bl,CLR_DEAD);
 		return;
 	}
-#ifdef RENEWAL
-	if (sd->npc_id || pc_hasprogress(sd, WIP_DISABLE_NPC)) {
-		clif_msg(sd, WORK_IN_PROGRESS);
-		return;
-	}
-#endif
 	if (pc_cant_act2(sd) || sd->npc_id)
 		return;
 	if( sd->state.mail_writing )
@@ -11495,12 +11472,6 @@ void clif_parse_NpcClicked(int fd,struct map_session_data *sd)
 			clif_parse_ActionRequest_sub(sd, 0x07, bl->id, gettick());
 			break;
 		case BL_NPC:
-#ifdef RENEWAL
-			if (sd->ud.skill_id < RK_ENCHANTBLADE && sd->ud.skilltimer != INVALID_TIMER) { // Should only show an error message for non-3rd job skills with a running timer
-				clif_msg(sd, WORK_IN_PROGRESS);
-				break;
-			}
-#endif
 			if( bl->m != -1 ){ // the user can't click floating npcs directly (hack attempt)
 				struct npc_data* nd = (struct npc_data*)bl;
 
@@ -11915,7 +11886,7 @@ void clif_parse_ChangeCart(int fd,struct map_session_data *sd)
 	if( !sd || pc_checkskill(sd, MC_CHANGECART) < 1 )
 		return;
 
-#ifdef RENEWAL
+#ifdef DISPLAY_MESSAGE_WIP
 	if (sd->npc_id || pc_hasprogress(sd, WIP_DISABLE_SKILLITEM)) {
 		clif_msg(sd, WORK_IN_PROGRESS);
 		return;
@@ -12107,7 +12078,7 @@ void clif_parse_UseSkillToId(int fd, struct map_session_data *sd)
 		sd->idletime = last_tick;
 
 	if (sd->npc_id) {
-#ifdef RENEWAL
+#ifdef DISPLAY_MESSAGE_WIP
 		if (pc_hasprogress(sd, WIP_DISABLE_SKILLITEM)) {
 			clif_msg(sd, WORK_IN_PROGRESS);
 			return;
@@ -12203,7 +12174,7 @@ static void clif_parse_UseSkillToPosSub(int fd, struct map_session_data *sd, uin
 		return;
 	}
 
-#ifdef RENEWAL
+#ifdef DISPLAY_MESSAGE_WIP
 	if (pc_hasprogress(sd, WIP_DISABLE_SKILLITEM)) {
 		clif_msg(sd, WORK_IN_PROGRESS);
 		return;

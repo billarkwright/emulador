@@ -64,21 +64,12 @@ char buyingstores_table[32] = "buyingstores";
 char buyingstore_items_table[32] = "buyingstore_items";
 char item_cash_table[32] = "item_cash_db";
 char item_cash2_table[32] = "item_cash_db2";
-#ifdef RENEWAL
-char item_table[32] = "item_db_re";
-char item2_table[32] = "item_db2_re";
-char mob_table[32] = "mob_db_re";
-char mob2_table[32] = "mob_db2_re";
-char mob_skill_table[32] = "mob_skill_db_re";
-char mob_skill2_table[32] = "mob_skill_db2_re";
-#else
 char item_table[32] = "item_db";
 char item2_table[32] = "item_db2";
 char mob_table[32] = "mob_db";
 char mob2_table[32] = "mob_db2";
 char mob_skill_table[32] = "mob_skill_db";
 char mob_skill2_table[32] = "mob_skill_db2";
-#endif
 char sales_table[32] = "sales";
 char vendings_table[32] = "vendings";
 char vending_items_table[32] = "vending_items";
@@ -3594,10 +3585,7 @@ int map_readallmaps (void)
 	if( enable_grf )
 		ShowStatus("Loading maps (using GRF files)...\n");
 	else {
-		const char* mapcachefilepath[] = {
-			"db/" DBPATH "map_cache.dat",
-			"db/import/map_cache.dat"
-		};
+		const char* mapcachefilepath[] = { "db/map_cache.dat", "db/import/map_cache.dat" };
 
 		for( i = 0; i < 2; i++ ){
 			ShowStatus( "Loading maps (using %s as map cache)...\n", mapcachefilepath[i] );
@@ -3938,11 +3926,7 @@ void map_reloadnpc(bool clear)
 	if (clear)
 		npc_addsrcfile("clear", false); // this will clear the current script list
 
-#ifdef RENEWAL
-	map_reloadnpc_sub("npc/re/scripts_main.conf");
-#else
-	map_reloadnpc_sub("npc/pre-re/scripts_main.conf");
-#endif
+	map_reloadnpc_sub("npc/scripts_main.conf");
 }
 
 int inter_config_read(const char *cfgName)
@@ -3961,18 +3945,6 @@ int inter_config_read(const char *cfgName)
 			continue;
 		if( sscanf(line,"%1023[^:]: %1023[^\r\n]",w1,w2) < 2 )
 			continue;
-
-#define RENEWALPREFIX "renewal-"
-		if (!strncmpi(w1, RENEWALPREFIX, strlen(RENEWALPREFIX))) {
-#ifdef RENEWAL
-			// Move the original name to the beginning of the string
-			memmove(w1, w1 + strlen(RENEWALPREFIX), strlen(w1) - strlen(RENEWALPREFIX) + 1);
-#else
-			// In Pre-Renewal the Renewal specific configurations can safely be ignored
-			continue;
-#endif
-		}
-#undef RENEWALPREFIX
 
 		if( strcmpi( w1, "buyingstore_db" ) == 0 )
 			strcpy( buyingstores_table, w2 );

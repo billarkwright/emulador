@@ -1481,9 +1481,6 @@
 	export_constant(SC_DORAM_SVSP);
 	export_constant(SC_FALLEN_ANGEL);
 	export_constant(SC_CHEERUP);
-#ifdef RENEWAL
-	export_constant(SC_EXTREMITYFIST2);
-#endif
 
 	/* status icons */
 	export_constant(SI_BLANK);

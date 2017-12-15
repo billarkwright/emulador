@@ -79,30 +79,6 @@ AC_ARG_ENABLE(
 
 
 #
-# renewal
-#
-AC_ARG_ENABLE(
-	[prere],
-	AC_HELP_STRING(
-		[--enable-prere@<:@=ARG@:>@],
-		[
-			Compiles serv in prere mode. (disabled by default)
-			(available options: yes, no)
-		]
-	),
-	[
-		enable_prere="$enableval"
-		case $enableval in
-			"no");;
-			"yes");;
-			*) AC_MSG_ERROR([[invalid argument --enable-prere=$enableval... stopping]]);;
-		esac
-	],
-	[enable_prere="no"]
-)
-
-
-#
 # VIP
 #
 AC_ARG_ENABLE(
@@ -1010,19 +986,6 @@ case $enable_debug in
 		    echo "error: --enable-debug flag=$enable_debug entered but the compiler does not support -g"
 		    exit 1
                 fi
-		;;
-esac
-
-#
-# Renewal
-#
-case $enable_prere in
-	"no")
-		# default value
-		CPPFLAGS="$CPPFLAGS"
-		;;
-	"yes")
-		CPPFLAGS="$CPPFLAGS -DPRERE"
 		;;
 esac
 

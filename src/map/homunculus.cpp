@@ -514,8 +514,6 @@ int hom_levelup(struct homun_data *hd)
 	hom->int_+= growth_int;
 	hom->luk += growth_luk;
 
-	APPLY_HOMUN_LEVEL_STATWEIGHT();
-
 	// Needed to update skill list for mutated homunculus so unlocked skills will appear when the needed level is reached.
 	status_calc_homunculus(hd,SCO_NONE);
 	clif_hominfo(hd->master,hd,0);
@@ -1509,10 +1507,7 @@ static bool read_homunculusdb_sub(char* str[], int columns, int current)
 */
 void read_homunculusdb(void) {
 	uint8 i;
-	const char *filename[] = {
-		DBPATH"homunculus_db.txt",
-		DBIMPORT"/homunculus_db.txt",
-	};
+	const char *filename[] = { "homunculus_db.txt", "import/homunculus_db.txt" };
 	homunculus_count = 0;
 	memset(homunculus_db,0,sizeof(homunculus_db));
 	for(i = 0; i<ARRAYLENGTH(filename); i++){
@@ -1565,7 +1560,7 @@ static bool read_homunculus_skilldb_sub(char* split[], int columns, int current)
 * Read homunculus skill db (check the files)
 */
 static void read_homunculus_skilldb(void) {
-	const char *filename[] = { "homun_skill_tree.txt", DBIMPORT"/homun_skill_tree.txt"};
+	const char *filename[] = { "homun_skill_tree.txt", "import/homun_skill_tree.txt"};
 	int i;
 	memset(hskill_tree,0,sizeof(hskill_tree));
 	for (i = 0; i<ARRAYLENGTH(filename); i++) {
@@ -1579,10 +1574,7 @@ static void read_homunculus_skilldb(void) {
 void read_homunculus_expdb(void)
 {
 	int i;
-	const char *filename[]={
-		DBPATH"exp_homun.txt",
-		DBIMPORT"/exp_homun.txt"
-	};
+	const char *filename[]={ "exp_homun.txt", "import/exp_homun.txt" };
 
 	memset(hexptbl,0,sizeof(hexptbl));
 	for (i = 0; i < ARRAYLENGTH(filename); i++) {
