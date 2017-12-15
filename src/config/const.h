@@ -28,10 +28,6 @@
 	#error NPC_SECURE_TIMEOUT_NEXT cannot be lower than 0
 #endif
 
-/**
- * Path within the /db folder to (non-)renewal specific db files
- **/
-
 #define DBIMPORT "import"
 
 /* pointer size fix which fixes several gcc warnings */
