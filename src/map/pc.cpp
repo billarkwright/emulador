@@ -9709,7 +9709,7 @@ bool pc_equipitem(struct map_session_data *sd,short n,int req_pos)
 	if(itemdb_isspecial(sd->inventory.u.items_inventory[n].card[0]))
 		; //No cards
 	else {
-		for( i = 0; i < id->slot; i++ ) {
+		for( i = 0; i < MAX_SLOTS; i++ ) {
 			struct item_data *data;
 			if (!sd->inventory.u.items_inventory[n].card[i])
 				continue;
@@ -9732,7 +9732,7 @@ bool pc_equipitem(struct map_session_data *sd,short n,int req_pos)
 		if(itemdb_isspecial(sd->inventory.u.items_inventory[n].card[0]))
 			; //No cards
 		else {
-			for( i = 0; i < id->slot; i++ ) {
+			for( i = 0; i < MAX_SLOTS; i++ ) {
 				struct item_data *data;
 				if (!sd->inventory.u.items_inventory[n].card[i])
 					continue;
@@ -9758,7 +9758,7 @@ bool pc_equipitem(struct map_session_data *sd,short n,int req_pos)
  *------------------------------------------*/
 bool pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 	int i, iflag;
-	bool status_cacl = false;
+	bool status_calc = false;
 
 	nullpo_retr(false,sd);
 
@@ -9846,11 +9846,11 @@ bool pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 	if ( sd->inventory_data[n] ) {
 		if( sd->inventory_data[n]->combos_count ) {
 			if( pc_removecombo(sd,sd->inventory_data[n]) )
-				status_cacl = true;
+				status_calc = true;
 		} if(itemdb_isspecial(sd->inventory.u.items_inventory[n].card[0]))
 			; //No cards
 		else {
-			for( i = 0; i < sd->inventory_data[n]->slot; i++ ) {
+			for( i = 0; i < MAX_SLOTS; i++ ) {
 				struct item_data *data;
 
 				if (!sd->inventory.u.items_inventory[n].card[i])
@@ -9858,14 +9858,14 @@ bool pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 				if ( ( data = itemdb_exists(sd->inventory.u.items_inventory[n].card[i]) ) != NULL ) {
 					if( data->combos_count ) {
 						if( pc_removecombo(sd,data) )
-							status_cacl = true;
+							status_calc = true;
 					}
 				}
 			}
 		}
 	}
 
-	if(flag&1 || status_cacl) {
+	if(flag&1 || status_calc) {
 		pc_checkallowskill(sd);
 		status_calc_pc(sd,SCO_NONE);
 	}
@@ -9880,7 +9880,7 @@ bool pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 		if(itemdb_isspecial(sd->inventory.u.items_inventory[n].card[0]))
 			; //No cards
 		else {
-			for( i = 0; i < sd->inventory_data[n]->slot; i++ ) {
+			for( i = 0; i < MAX_SLOTS; i++ ) {
 				struct item_data *data;
 				if (!sd->inventory.u.items_inventory[n].card[i])
 					continue;

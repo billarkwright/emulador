@@ -8,7 +8,7 @@
 // Banco de dados dos castelos
 //-----------------------------------------------
 
-// Sintaxe:
+// Estrutura:
 // IDdoCastelo,NomeDoMapa,NomeDoCastelo,OnGuildBreak,Flag
 //
 // 01. IDdoCastelo     Número de identificação única para um castelo.

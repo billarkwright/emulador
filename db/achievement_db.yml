@@ -1555,7 +1555,7 @@ Achievements:
     Name: "Acquire the first aura!"
     Condition: " BaseLevel >= 99 "
     Reward:
-      ItemID: 12549
+    #  ItemID: 12549
       Script: " specialeffect2 EF_BLESSING; sc_start SC_BLESSING,30000,10; "
       TitleID: 1000
     Score: 50

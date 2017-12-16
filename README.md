@@ -1,32 +1,28 @@
-rAthena
+Cronus Legacy
 =======
 
-Build Status: [![Build Status](https://travis-ci.org/rathena/rathena.png?branch=master)](https://travis-ci.org/rathena/rathena) [![Build status](https://ci.appveyor.com/api/projects/status/8574b8nlwd57loda/branch/master?svg=true)](https://ci.appveyor.com/project/rAthenaAPI/rathena/branch/master)
+Compilação: [![Build Status](https://travis-ci.org/cronusfoundation/emulador.png?branch=master)](https://travis-ci.org/cronusfoundation/emulador)
 
-Table of Contents
+Índice
 ---------
-1. What is rAthena?
-2. Prerequisites
-3. Installation
+1. O que é o Cronus Legacy?
+2. Pré-requisitos
+3. Instalação
 4. Troubleshooting
 5. Helpful Links
 6. More Documentation
 7. How to Contribute
 
-1. What is rAthena?
+1. O que é o Cronus Legacy?
 ---------
-rAthena is a collaborative software development project revolving around the
-creation of a robust massively multiplayer online role playing game (MMORPG)
-server package. Written in C, the program is very versatile and provides NPCs,
-warps and modifications. The project is jointly managed by a group of volunteers
-located around the world as well as a tremendous community providing QA and
-support. rAthena is a continuation of the eAthena project.
+O Cronus Legacy é um fork do projeto de software open-source rAthena,
+com de manter somente as mecânicas da pré-renovação, e focado na comunidade brasileira.
+O projeto utiliza C e C++ como linguagens de programação, e é mantido por voluntários.
 
-2. Prerequisites
+2. Pré-requisitos
 ---------
-Before installing rAthena there are certain tools and applications you will need.
-This differs between the varying operating systems available, so the following
-is broken down into Windows and Linux prerequisites.
+Antes de instalar o Cronus Legacy, é preciso instalar ferramentas e programas,
+o que varia de acordo com seu sistema operacional.
 
 * Windows
 	* MySQL ( http://www.mysql.com/downloads/mysql/ )
@@ -35,7 +31,7 @@ is broken down into Windows and Linux prerequisites.
 	* TortoiseGIT ( http://code.google.com/p/tortoisegit/ )
 	* MSysGit ( http://msysgit.github.io/ or https://github.com/msysgit/git/releases )
 
-* Linux (names of packages may require specific version numbers on certain distributions)
+* Linux (o nome dos pacotes podem variar de acordo com as distrbuições)
 	* gcc
 	* g++
 	* make
@@ -46,7 +42,7 @@ is broken down into Windows and Linux prerequisites.
 	* zlib-devel
 	* git
 
-3. Installation 
+3. Instalação 
 ---------
 This section is a very brief set of installation instructions. For more concise guides
 relevant to your Operation System, please refer to the Wiki (links at the end of this file).

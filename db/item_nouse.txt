@@ -1,15 +1,23 @@
-// Item Usage Restriction Configuration File
-// Defines if an item cannot be used under special circumstances.
+// _________                                    
+// \_   ___ \_______  ____   ____  __ __  ______
+// /    \  \/\_  __ \/    \ /    \|  |  \/  ___/
+// \     \____|  | \(  ( ) )   |  \  |  /\___ \ 
+//  \______  /|__|   \____/|___|  /____//____  >
+//         \/                   \/           \/ 
+//-----------------------------------------------
+// Banco de dados para restrição de uso de itens
+//-----------------------------------------------
+
+// Define a condição para utilização ou não de um certo item.
 //
-// Structure of Database:
-// ItemID,Flag,Group ID Override
+// Estrutura:
+// IDdoItem,Flag,OverrideGroupID
 //
 // Flag:
-//	1 = Cannot use item while sitting
-//	... [more to come]
+//	1 = Item não pode ser usado enquanto o jogador estiver sentado.
 //
-// Group ID Override:
-//	Group ID necessary to override this setting.
+// OverrideGroupID:
+//	Group ID necessário para 'burlar' esta restrição.
 
 606,1,100	// Aloebera
 619,1,100	// Unripe_Apple
@@ -54,7 +62,6 @@
 698,1,100	// Fire_Scroll_3_1
 699,1,100	// Fire_Scroll_3_5
 700,1,100	// Cold_Scroll_2_1
-11702,1,100	// Moon_Cookie
 12000,1,100	// Cold_Scroll_2_5
 12001,1,100	// Holy_Scroll_1_3
 12002,1,100	// Holy_Scroll_1_5
@@ -76,56 +83,31 @@
 12235,1,100	// Strawberry_Choco
 12236,1,100	// Choco_Tart
 12237,1,100	// Choco_Lump
-12290,1,100	// Mysterious_Can
-12291,1,100	// Mysterious_PET_Bottle
 12310,1,100	// Spray_Of_Flowers
 12311,1,100	// Large_Spray_Of_Flowers
-12313,1,100	// Protection_Of_Angel
 12323,1,100	// N_Fly_Wing
 12324,1,100	// N_Butterfly_Wing
 12325,1,100	// N_Magnifier
-12340,1,100	// Mysterious_Rice_Powder
 12347,1,100	// Acorn_Jelly
 12350,1,100	// Angeling_Potion
 12358,1,100	// Fan_Of_Wind
 12359,1,100	// Very_Soft_Plant
 12360,1,100	// Very_Red_Juice
 12361,1,100	// Delicious_Shaved_Ice
-12362,1,100	// Kuloren
 12363,1,100	// Fit_Pipe
 12364,1,100	// Staff_Of_Leader
 12365,1,100	// Charming_Lotus
 12366,1,100	// Gril_Doll
 12367,1,100	// Luxury_Whisky_Bottle
 12368,1,100	// Splendid_Mirror
-12369,1,100	// Oilpalm_Coconut
 12370,1,100	// Gril's_Naivety
-12371,1,100	// Magical_Lithography
-12372,1,100	// Hell_Contract
 12373,1,100	// Boy's_Naivety
 12374,1,100	// Flaming_Ice
-12376,1,100	// Mysterious_Can2
-12377,1,100	// Mysterious_PET_Bottle2
-12388,1,100	// Runstone_Crush
-12389,1,100	// Runstone_Storm
-12390,1,100	// Runstone_Millennium
 12396,1,100	// Fools_Day_Box
 12397,1,100	// Fools_Day_Box2
-12415,1,100	// Siege_Teleport_Scroll2
-12473,1,100	// RWC_Parti_Box
-12474,1,100	// RWC_Final_Comp_Box
 12706,1,100	// Lucky_Cookie01
 12707,1,100	// Lucky_Cookie02
 12708,1,100	// Lucky_Cookie03
-12725,1,100	// Runstone_Nosiege
-12726,1,100	// Runstone_Rhydo
-12727,1,100	// Runstone_Verkana
-12728,1,100	// Runstone_Isia
-12729,1,100	// Runstone_Asir
-12730,1,100	// Runstone_Urj
-12731,1,100	// Runstone_Turisus
-12732,1,100	// Runstone_Pertz
-12733,1,100	// Runstone_Hagalas
 14521,1,100	// Repair_Scroll
 14529,1,100	// Greed_Scroll
 14532,1,100	// Battle_Manual25
@@ -133,6 +115,3 @@
 14591,1,100	// Siege_Teleport_Scroll
 14592,1,100	// Job_Manual50
 14593,1,100	// Magic_Power_Scroll
-14594,1,100	// Quagmire_Scroll
-14599,1,100	// Greed_Scroll_C
-14606,1,100	// Job_Manual25

@@ -1,29 +1,26 @@
-// Item Stacking Restriction File
-// Prevents an item to be stacked more than x times in given
-// inventory types. Generally used by 3rd class related skill items.
-//
-// Structure of Database:
-// ItemID,MaxStackAmount,Type
-//
-// MaxStackAmount:
-//	Stack limit for the item. Use 0 to disable a restriction.
-//
-// Type mask values:
-//	&1: Character inventory restriction
-//	&2: Character cart restriction
-//	&4: Account storage restriction
-//	&8: Guild storage restriction
-//
-// Example:
-// 512,4,12  // Will not allow more than 4 Apples in storages.
+// _________                                    
+// \_   ___ \_______  ____   ____  __ __  ______
+// /    \  \/\_  __ \/    \ /    \|  |  \/  ___/
+// \     \____|  | \(  ( ) )   |  \  |  /\___ \ 
+//  \______  /|__|   \____/|___|  /____//____  >
+//         \/                   \/           \/ 
+//-----------------------------------------------
+// Banco de dados para restrição de agrupamento de itens
+//-----------------------------------------------
 
-// Rune Knight
-12725,60,1  // Nauthiz Rune
-12726,60,1  // Raido Rune
-12727,60,1  // Berkana Rune
-12728,60,1  // Isa Rune
-12730,60,1  // Uruz Rune
-12733,60,1  // Hagalaz Rune
-
-// Arch Bishop
-12333,3,1  // Ancilla
+// Previne que um item seja agrupado em mais de x vezes.
+//
+// Estrutura:
+// IDdoItem,QuantidadeMaximaAgrupavel,Tipo
+//
+// QuantidadeMaximaAgrupavel:
+//	Limite de quantidades para o item. Valor de 0 desabilita a restrição.
+//
+// Tipo (bitmask):
+//	&1: Restrição no inventário do personagem
+//	&2: Restrição no carrinho do personagem
+//	&4: Restrição no armazém da conta
+//	&8: Restrição no armazém do clã
+//
+// Exemplo:
+// 512,4,12  // Não permite mais do que 4x Maçã nos armazéns de todos os jogadores

@@ -1,14 +1,24 @@
-// Flagged Items
-// <ItemID>,<Flag>
+// _________                                    
+// \_   ___ \_______  ____   ____  __ __  ______
+// /    \  \/\_  __ \/    \ /    \|  |  \/  ___/
+// \     \____|  | \(  ( ) )   |  \  |  /\___ \ 
+//  \______  /|__|   \____/|___|  /____//____  >
+//         \/                   \/           \/ 
+//-----------------------------------------------
+// Banco de dados para itens com marcações especiais
+//-----------------------------------------------
+
+// Estrutura:
+// IDdoItem,Flag
 //
-// <Flag>:
-//  1 - As Dead Branch item (will be logged at `branchlog` table and cannot be used at 'nobranch' mapflag)
-//  2 - As item group container, check player's inventory and weight before consumed
-//  4 - GUID Item: When this item is obtained, will generates GUID that cannot be stacked even same or stackable item
-//  8 - Item will be bound item when equipped
-// 16 - Special Broadcast: When item dropped by monster and player loot it, will be broadcasted!
-// 32 - Item will not be removed on consumption. Also supports 'itemskill'
-// NOTE: For removing flag by import file, use "-" to remove the flag. Example, 604,-1 will removes flag 1 from Branch_Of_Dead_Tree
+// Flag (item marcado como):
+//  1 - Galho Seco (será gravado na tabela `branchlog` e não pode ser usado em mapas com mapflag 'nobranch')
+//  2 - Item no qual contém outro item (caixas, ovos), e verifica o limite de inventário e peso do jogador antes de ser consumido
+//  4 - Item com GUID. Quando o item é obitdo, um GUID é gerado que não permite acumulação do item
+//  8 - Item atrelado (a conta, personagem, etc) ao ser obtido
+// 16 - Anúncio Especial: quando o item cair de um monstro e o jogador pegá-lo, ocorrerá um anúncio global
+// 32 - Item que não será removido/apagado ao ser consumido. Também dá suporte ao comando 'itemskill'
+// NOTA: Para remover uma marcação (flag) usando a pasta import, coloque - (negativo) a frente da flag.
 
 // Logged as Dead Branch item
 604,1 //Branch_Of_Dead_Tree
@@ -29,7 +39,6 @@
 12023,2 //Giftbox_China
 12025,2 //Egg_Boy
 12026,2 //Egg_Girl
-12038,2 //Lotto_Box04
 12104,2 //Random_Quiver
 12105,2 //Set_Of_Taiming_Item
 12106,2 //Accessory_Box
@@ -38,20 +47,9 @@
 12110,2 //First_Aid_Kit
 12111,2 //Food_Package
 12130,2 //Cookie_Bag
-12186,2 //Red_Box
-12187,2 //Green_Box
-12189,2 //Red_Box_
-12194,2 //Hometown_Gift
-12240,2 //Old_Yellow_Box
 12244,2 //Old_Gift_Box
 12246,2 //Magic_Card_Album
-12248,2 //Masquerade_Ball_Box
-12281,2 //Tresure_Box_WoE
-12286,2 //Masquerade_Ball_Box2
-12334,2 //Cherish_Box
-12339,2 //Cherish_Box_Ori
 12355,2 //Xmas_Gift
 12356,2 //Louise_Costume_Box
 12702,2 //Old_Bleu_Box
-12714,2 //Easter_Scroll
 14596,2 //Pierre_Treasurebox
