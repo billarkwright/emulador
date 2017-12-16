@@ -115,7 +115,6 @@ ra_temsky	mapflag	nomemo
 ve_in	mapflag	nomemo
 ve_in02	mapflag	nomemo
 thor_camp	mapflag	nomemo
-moc_para01	mapflag	nomemo
 
 // Fields  ===================
 alb2trea	mapflag	nomemo
