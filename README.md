@@ -13,6 +13,7 @@ Compilação: [![Build Status](https://travis-ci.org/cronusfoundation/emulador.png
 6. More Documentation
 7. How to Contribute
 
+
 1. O que é o Cronus Legacy?
 ---------
 O Cronus Legacy é um fork do projeto de software open-source rAthena,

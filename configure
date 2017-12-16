@@ -1341,8 +1341,6 @@ Optional Features:
   --enable-packetver=ARG  Sets the PACKETVER define. (see src/common/mmo.h)
   --enable-debug[=ARG]    Compiles extra debug code. (disabled by default)
                           (available options: yes, no, gdb)
-  --enable-prere[=ARG]    Compiles serv in prere mode. (disabled by default)
-                          (available options: yes, no)
   --enable-vip[=ARG]      Compiles serv with vip features. (disabled by
                           default) (available options: yes, no)
   --enable-warn[=ARG]     Compiles with warnings. (disabled by default)
